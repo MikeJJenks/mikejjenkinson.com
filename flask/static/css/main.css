@@ -1,0 +1,152 @@
+body {
+  font-family: "Lucida Console", Monaco, monospace; 
+  /* font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif; */
+  font-size: 18px;
+  background: url("bg.jpg") no-repeat center center fixed;
+  background-size: cover;
+  margin: 0;
+}
+
+.wrapper {
+  margin-top: 80px;
+  padding-left: 80px;
+  padding-top: 50px;
+  padding-bottom: 30px;
+  padding-right: 80px;
+  background-color: white;
+  margin-right: 0%;
+}
+
+.linkbox {
+  display: inline-block;
+  vertical-align: text-top;
+  padding-right: 80px;
+  margin-bottom: 30px;
+}
+
+.wrapperlisten {
+  margin-top: 80px;
+  padding-left: 80px;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  background-color: white;
+  margin-left: 7%;
+  margin-right: 14%;
+}
+
+.listen {
+  font-size: 22px;
+}
+
+.play {
+  margin-top: 40px;
+  padding-left: 40px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  background-color: white;
+  margin-left: 7%;
+  margin-right: 30%;
+}
+
+.playnum {
+        display: inline-block;
+        vertical-align: text-top;
+        font-size: 20px;
+        width: 25px;
+}
+
+.playtext {
+        display: inline-block;
+        vertical-align: text-top;
+        margin-left: 20px;
+	font-size: 16px;
+}
+
+.playimg {
+        display: inline-block;
+        vertical-align: text-top;
+        margin-left: 20px;
+        font-size: 16px;
+	float: right;
+	margin-right: 5%;
+	margin-top: -1%;
+	height: 100%;
+	display:block;
+}
+
+.playtrack {
+        font-weight: bold;
+        font-size: 16px;
+}
+
+.playartist {
+        font-style: italic;
+        font-size: 16px;
+}
+
+.playdetail {
+  font-size: 8px;
+  margin-left: 0px;
+  margin-right: 0px;
+  max-width: 100%;
+  /* background-color: #F8F8F8; */
+}
+
+
+
+
+
+.watch {
+  margin-top: 40px;
+  padding-left: 40px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  background-color: white;
+  margin-left: 7%; 
+  margin-right: 30%;
+}
+
+.watchnum {
+        display: inline-block;
+        vertical-align: text-top;
+        font-size: 20px;
+        width: 25px;
+}
+
+
+
+
+a {
+  font-weight: bold;
+  /* text-decoration: none; */
+  text-decoration: none;
+  color: black;
+}
+
+.linkbox a:hover {
+  font-weight: bold;
+  color: Gray; 
+}
+
+.play a {
+  font-weight: normal;
+  text-decoration: none;
+}
+
+.play a:hover {
+  font-weight: bold;
+  color: Gray;
+}
+
+.playdetail a {
+  font-weight: normal;
+  text-decoration: none;
+  margin-left: 10px;
+}
+
+.playtextdetail {
+        display: inline-block;
+        vertical-align: text-top;
+        margin-left: 0px;
+}
+

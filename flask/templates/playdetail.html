@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+
+        <head>
+                <title>Michael Jenkinson's page.</title>
+                <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/main.css') }}">
+                <style type="text/css">
+                body {
+                        background: url({{ url_for('static', filename=bg) }}) no-repeat center center fixed;
+                        background-size: cover;
+                }   
+                </style>
+
+        </head>
+
+	<body>
+                <div class="playdetail">
+
+                	<div class="playtextdetail">
+                        	        <div class="playtrack">{{ trackcsv.Track_Name }}</div>
+                                	<div class="playartist">{{ trackcsv.Artist }}</div>
+					{{ trackcsv.Album }}<br>
+					{% set tp = trackcsv.Time_Played.split('T') %}
+                			{{ tp[1].split('.')[0] }}, {{ tp[0] }} (UTC)<br>
+                	</div>
+
+			<br><br>
+
+			<a href="{{ track['track.external_urls.spotify'] }}">	
+				<img src="{{ track['track.album.images'][0]['url'] }}" width="400">
+			</a>
+
+		</div>
+
+		<br>Return to the <a href = "/listening">listening</a> page.<br>
+
+	</body>
+</html>

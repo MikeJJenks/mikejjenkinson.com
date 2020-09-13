@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+        <head>
+                <title>Listening.</title>
+                <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/main.css') }}">
+                <style type="text/css">
+                body {
+                        background: url({{ url_for('static', filename=bg) }}) no-repeat center center fixed;
+                        background-size: cover;
+                }   
+                </style>
+
+        </head>
+
+	<body>
+		<div class="wrapper">
+			I try to manually keep this page up to date on things I've been watching. 
+			<br>
+		<br>
+
+                <div class="linkbox">
+                Pages.<br>
+                <a href = "/">Home.</a><br>
+                </div>
+		
+		<div class="linkbox">
+		Links.<br>
+		</div>
+
+		<div class="linkbox">
+		References. <br>
+		<a href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04">Flask/Nginx/Gunicorn.</a>
+		<br>
+		</div>
+		</div>
+
+		{% for film in films %}
+                <div class="play">
+		        <div class="playnum">
+                        {{ loop.index }}
+                	</div>
+		
+                	<div class="playtext">
+                                <div class="playtrack">{{ film.Film_Name }}</div>
+                                <div class="playartist">Dir. {{ film.Director }}</div>
+					{{ film.Year  }}<br>
+                	</div>
+
+			<div class="playimg">
+                        	<img src = "{{ film.Image }}">
+                	</div>
+
+		</div>
+		{% endfor %}	
+
+	<br>
+
+	</body>
+
+</html>

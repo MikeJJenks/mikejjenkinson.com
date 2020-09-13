@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<title>Michael Jenkinson's page.</title>
+		<link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/main.css') }}">
+		<style type="text/css">
+		body {
+			background: url({{ url_for('static', filename=bg) }}) no-repeat center center fixed;
+			background-size: cover;
+		}
+		</style>
+
+	</head>
+
+	<body>	
+		<div class="wrapper">
+		You have landed on Michael Jenkinson's page.<br>
+		<br>
+
+		<div class="linkbox">
+                Pages.<br>
+		<a href = "/about">About.</a><br>
+                <a href = "/listening">Listening.</a><br>
+                <a href = "/watching">Watching.</a><br>
+                </div>
+
+		<div class="linkbox">
+                Links.<br>
+                <a href = "https://www.linkedin.com/in/michaeljjenkinson">LinkedIn.</a><br>
+                <a href = "https://github.com/MikeJJenks">Github.</a><br>
+		<a href = "https://scholar.google.com/citations?user=mRjLP2YAAAAJ&hl=en">Publications.</a><br>
+                </div>
+
+                <div class="linkbox">
+                References.<br>
+		<a href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04">Flask/Nginx/Gunicorn.</a><br>
+                </div>
+		</div>			
+	</body>
+
+</head>

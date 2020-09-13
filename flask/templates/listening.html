@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+        <head>
+                <title>Listening.</title>
+                <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/main.css') }}">
+                <style type="text/css">
+                body {
+                        background: url({{ url_for('static', filename=bg) }}) no-repeat center center fixed;
+                        background-size: cover;
+                }   
+                </style>
+
+        </head>
+
+	<body>
+		<div class="wrapper">
+			This page tracks my Spotify listening history in real(-ish) time. The underlying Python application uses the Spotipy wrapper for the Spotify Web API - see the references below. To listen to a full playlist of the tracks or view the source code - see the links below. To listen to a track directly in Spotify - click it in the list below.
+			<br>
+			<br>
+			Records were last updated on {{ log.Time_Updated[0] }} at {{ log.Time_Updated[1] }} (UTC)     with {{ log.Plays_Added }} new play{{ npl }} added.<br>
+		<br>
+
+                <div class="linkbox">
+                Pages.<br>
+                <a href = "/">Home.</a><br>
+                </div>
+		
+		<div class="linkbox">
+		Links.<br>
+		<a href="{{ log.Playlist_id }}">Playlist.</a><br>
+		<a href="github.io">Source Code.</a><br>
+		</div>
+
+		<div class="linkbox">
+		References. <br>
+		<a href="https://spotipy.readthedocs.io/en/2.12.0/">Spotipy.</a><br>
+		<a href="https://developer.spotify.com/documentation/web-api/">Spotify Web API.</a><br>
+		<a href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04">Flask/Nginx/Gunicorn.</a>
+		<br>
+		</div>
+
+		</div>
+
+	<br>
+		{% for track in playscsv %}
+		{% set tp = track.Time_Played.split('T') %}
+		<div class="play">
+
+		<div class="playnum">
+			<a href="listening/{{track.id}}">
+				{{ loop.index }}
+			</a>
+		</div>
+
+		<div class="playtext">
+			<a href="listening/{{track.id}}">
+				<div class="playtrack">{{ track.Track_Name }}</div>
+				<div class="playartist">{{ track.Artist }}</div>
+			{{ track.Album }}<br>
+			{{ tp[1].split('.')[0] }}, {{ tp[0] }} (UTC)<br>
+			
+			</a>
+		</div>
+
+		<div class="playimg">
+			<img src = "{{ track.uri }}", style="width:100px">			
+		</div>
+
+		</div>
+		{% endfor %}
+	<br>
+
+	</body>
+
+</html>
