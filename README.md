@@ -7,7 +7,7 @@
 
 ## Overview
 
-This repository contains the source code for my personal page located at http://www.mikejjenkinson.com. The page is written using the Python Flask library. The application serves each of the individual pages, in particular the [listening](http://www.mikejjenkinson.com/listening) page which pulls and displays a periodically updated data file which is the output of my (Spotter application) and which contains my up-to-date Spotify listening history. The Flask application is deployed on a cloud-based virtual machine using Gunicorn and Nginx. 
+This repository contains the source code for my personal page located at http://www.mikejjenkinson.com. The page is written using the Python Flask library. The application serves each of the individual pages, in particular the [listening](http://www.mikejjenkinson.com/listening) page which pulls and displays a periodically updated data file which is the output of my [Spotter application](https://github.com/MikeJJenks/spotter) and which contains my up-to-date Spotify listening history. The Flask application is deployed on a cloud-based virtual machine using Gunicorn and Nginx. 
 
 ## Useful links and documentation
 - [Personal Page](http://www.mikejjenkinson.com)
