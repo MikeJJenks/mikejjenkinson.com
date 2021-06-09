@@ -1,5 +1,5 @@
 body {
-  font-family: "Lucida Console", Monaco, monospace; 
+  font-family: Arial; 
   /* font-family: "Century Gothic", CenturyGothic, Geneva, AppleGothic, sans-serif; */
   font-size: 18px;
   background: url("bg.jpg") no-repeat center center fixed;
@@ -63,25 +63,25 @@ body {
 }
 
 .playimg {
-        display: inline-block;
-        vertical-align: text-top;
-        margin-left: 20px;
-        font-size: 16px;
-	float: right;
-	margin-right: 5%;
-	margin-top: -1%;
-	height: 100%;
-	display:block;
+  display: inline-block;
+  vertical-align: text-top;
+  margin-left: 20px;
+  font-size: 16px;
+  float: right;
+  margin-right: 5%;
+  margin-top: -1%;
+  height: 100%;
+  display:block;
 }
 
 .playtrack {
-        font-weight: bold;
-        font-size: 16px;
+  font-weight: bold;
+  font-size: 16px;
 }
 
 .playartist {
-        font-style: italic;
-        font-size: 16px;
+  font-style: italic;
+  font-size: 16px;
 }
 
 .playdetail {
@@ -91,10 +91,6 @@ body {
   max-width: 100%;
   /* background-color: #F8F8F8; */
 }
-
-
-
-
 
 .watch {
   margin-top: 40px;
@@ -107,25 +103,37 @@ body {
 }
 
 .watchnum {
-        display: inline-block;
-        vertical-align: text-top;
-        font-size: 20px;
-        width: 25px;
+  display: inline-block;
+  vertical-align: text-top;
+  font-size: 20px;
+  width: 25px;
 }
 
-
-
-
 a {
-  font-weight: bold;
-  /* text-decoration: none; */
   text-decoration: none;
-  color: black;
+  color: #606060; 
 }
 
 .linkbox a:hover {
-  font-weight: bold;
-  color: Gray; 
+  color: black; 
+}
+
+.lwrapper a:hover {
+  color: black;
+}
+
+<!--
+a.track {
+  color: red;
+}
+-->
+
+.halfbox a {
+  color: black;
+}
+
+.halfbox a:hover {
+  color: #606060;
 }
 
 .play a {
@@ -145,8 +153,121 @@ a {
 }
 
 .playtextdetail {
-        display: inline-block;
-        vertical-align: text-top;
-        margin-left: 0px;
+  display: inline-block;
+  vertical-align: text-top;
+  margin-left: 0px;
 }
 
+.halfbox {
+  display: inline-block;
+  vertical-align: text-top;
+  width: 45%;
+  margin: 0%;
+  margin-left: 20px;
+}
+
+.track {
+  margin-bottom: 10px;
+  margin-right: 0%;
+  margin-left: 20px;
+  padding: 0%;
+}
+
+.track .lnum {
+  width: 40px; 
+  display: inline-block;
+  vertical-align: text-top;
+  font-size: 16px;
+  margin: 0px;
+}
+
+.track .ltxt {
+  width: calc(100% - 45px);
+  display: inline-block;
+  vertical-align: text-top;
+  font-size: 11pt;
+  margin: 0px;
+}
+
+.track .name {
+  font-weight: bold;
+  font-size: 14px;
+  display: inline-block;
+}
+
+.track .artist {
+  font-size: 14px;
+  display: inline-block;
+  margin: 0px;
+}
+
+.track .album {
+  font-style: italic;
+  font-size: 14px;
+}
+
+.track .plays {
+  font-size: 14px;
+  display: inline-block;
+}
+
+.artist {
+  margin-bottom: 10px;
+  margin-right: 0%;
+  margin-left: 20px;
+  padding: 0%;
+}
+
+.artist .lnum {
+  width: 40px; 
+  display: inline-block;
+  vertical-align: text-top;
+  font-size: 16px;
+  margin: 0px;
+}
+
+.artist .ltxt {
+  width: calc(100% - 45px);
+  display: inline-block;
+  vertical-align: text-top;
+  font-size: 11pt;
+  margin: 0px;
+}
+
+.artist .name {
+  font-weight: bold;
+  font-size: 18px;
+  display: inline-block;
+}
+
+.artist .plays {
+  font-size: 16px;
+}
+
+.lwrapper {
+  margin-top: 80px;
+  padding-left: 80px;
+  padding-top: 35px;
+  padding-bottom: 45px;
+  padding-right: 80px;
+  background-color: white;
+  margin-right: 0%;
+}
+
+.lwrapper .toptitle {
+  font-size: 30px;
+  margin: 0%;
+  margin-bottom: 15px;
+}
+
+.lwrapper .subtitle {
+  font-size: 20px;
+  margin: 0%;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.lwrapper .note {
+  font-size: 14px;
+  margin-left: 20px;
+}

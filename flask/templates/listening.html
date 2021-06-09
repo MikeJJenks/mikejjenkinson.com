@@ -1,78 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-
-        <head>
-                <title>Listening.</title>
-                <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/main.css') }}">
-                <style type="text/css">
-                body {
-                        background: url({{ url_for('static', filename=bg) }}) no-repeat center center fixed;
+  <head>
+    <title>Listening.</title>
+    <link rel="stylesheet" type= "text/css" href="{{ url_for('static', filename='css/main.css') }}">
+    <style type="text/css">
+      body {
+            background: url({{ url_for('static', filename=bg) }}) no-repeat center center fixed;
                         background-size: cover;
-                }   
-                </style>
+           }   
+    </style>
+  </head>
 
-        </head>
+  <body>
+    <div class="lwrapper">
+      <div class="toptitle">About Spotify Tracker</div>
 
-	<body>
-		<div class="wrapper">
-			This page tracks my Spotify listening history in real(-ish) time. The underlying Python application uses the Spotipy wrapper for the Spotify Web API - see the references below. To listen to a full playlist of the tracks or view the source code - see the links below. To listen to a track directly in Spotify - click it in the list below.
-			<br>
-			<br>
-			Records were last updated on {{ log.Time_Updated[0] }} at {{ log.Time_Updated[1] }} (UTC)     with {{ log.Plays_Added }} new play{{ npl }} added.<br>
-		<br>
+      This page tracks my Spotify listening history in real-time. The underlying Python application uses the Spotipy wrapper
+      for the Spotify Web API. To see references, view the source code, or to listen to the generated playlist of my full listening history, see
+      the <a href="#linkboxes">links</a> at the bottom of the page. To listen to a track or artist directly in Spotify, click on the item in the lists below.
+      <br>
+      <br>
+      Records are updated every minute and were last updated on {{ log.Time_Updated[0] }} at {{ log.Time_Updated[1] }} (UTC) with {{ log.Plays_Added }} 
+      new play{{ npl }} added.
+    </div>
+    <div class="lwrapper">
+      <div class="toptitle">Top Recent Tracks</div>
+      <div class="halfbox">
 
-                <div class="linkbox">
-                Pages.<br>
-                <a href = "/">Home.</a><br>
-                </div>
+        <div class="subtitle">Top Tracks in the Past Month</div>
+	{% if (toptracksm['Track_Name'])|length == 0 %}
+          <div class="note">There have been no new plays in the past month.</div>
+        {% endif %}
+        {% for key,track in toptracksm.iterrows() %}
+	  <a href="http://open.spotify.com/track/{{ track['trackid']}}">
+	    <div class="track">
+              <div class="lnum">
+                {{ key + 1 }}
+	      </div>
+	      <div class="ltxt">
+                <div class="name">{{ track.Track_Name }}</div>
+                <div class="album">{{ track.Album }}</div>
+                <div class="artist">{{ track.Artist }} ({{ track['count'] }} plays) </div>
+              </div>
+	    </div>
+	  </a>
+        {% endfor %}
+      </div>
+
+      <div class="halfbox">
+
+        <div class="subtitle">Top Tracks in the Past Year</div>
+        {% if (toptracksy['Track_Name'])|length == 0 %}
+          <div class="note">There have been no new plays in the past year.</div>
+        {% endif %}
+
+        {% for key,track in toptracksy.iterrows() %}
+	  <a href="http://open.spotify.com/track/{{ track['trackid']}}">
+            <div class="track">
+              <div class="lnum">
+                {{ key + 1 }}
+              </div>
+              <div class="ltxt">
+                <div class="name">{{ track.Track_Name }}</div>
+                <div class="album">{{ track.Album }}</div>
+                <div class="artist">{{ track.Artist }} ({{ track['count'] }} plays) </div>
+              </div>
+            </div>
+	  </a>
+        {% endfor %}
+      </div>
+    </div> 
+
+    <div class="lwrapper">
+      <div class="toptitle">Top Recent Artists</div>
+      <div class="halfbox">
+        <div class="subtitle">Top Artists in the Past Month</div>
+	{% if (topartsm['Artist'])|length == 0 %}
+          <div class="note">There have been no new plays in the past month.</div>
+        {% endif %}
+
+        {% for key,artist in topartsm.iterrows() %}
+	  <a href="http://open.spotify.com/artist/{{ artist['artistid']}}">
+            <div class="artist">
+              <div class="lnum">
+                {{ key + 1 }}
+              </div>
+              <div class="ltxt">
+                <div class="name">{{ artist['Artist'] }}</div>
+                <div class="plays">{{ artist['count'] }} plays</div>
+              </div>
+            </div>
+	  </a>
+        {% endfor %}
+      </div>
+      <div class="halfbox">
+        <div class="subtitle">Top Artists in the Past Year</div>
+	{% if (topartsy['Artist'])|length == 0 %}
+          <div class="note">There have been no new plays in the past year.</div>
+        {% endif %}
+
+        {% for key,artist in topartsy.iterrows() %}
+	  <a href="http://open.spotify.com/artist/{{ artist['artistid']}}">
+            <div class="artist">
+              <div class="lnum">
+                {{ key + 1 }}
+              </div>
+              <div class="ltxt">
+                <div class="name">{{ artist['Artist'] }}</div>
+                <div class="plays">{{ artist['count'] }} plays</div>
+              </div>
+            </div>
+	  </a>
+        {% endfor %}
+      </div>
+    </div> 
+
+    <div class="lwrapper">
+      <div class="toptitle">Most Recent Plays</div>
+      {% if (playsr1['Track_Name'])|length == 0 %}
+        <div class="note">There are no plays on record.</div>
+      {% endif %}
+
+      <div class="halfbox">
+        {% for key,track in playsr1.iterrows() %}
+	  <a href="http://open.spotify.com/track/{{ track['trackid']}}">
+            <div class="track">
+              <div class="lnum">
+                {{ key + 1 }}
+              </div>
+              <div class="ltxt">
+                <div class="name">{{ track.Track_Name }}</div>
+                <div class="album">{{ track.Album }}</div>
+                <div class="artist">{{ track.Artist }}</div>
+	        <div class="time">Played on {{ track['Time_Played'][0] }} at {{ track['Time_Played'][1] }}</div>
+              </div>
+            </div>
+        {% endfor %}
+      </div>
+
+      <div class="halfbox">
+	{% for key,track in playsr2.iterrows() %}
+	  <a href="http://open.spotify.com/track/{{ track['trackid']}}">
+            <div class="track">
+              <div class="lnum">
+                {{ key + 1 }}
+              </div>
+              <div class="ltxt">
+                <div class="name">{{ track.Track_Name }}</div>
+                <div class="album">{{ track.Album }}</div>
+	        <div class="artist">{{ track.Artist }}</div> 
+	        <div class="time">Played on {{ track['Time_Played'][0] }} at {{ track['Time_Played'][1] }}</div>
+              </div>
+            </div>
+	  </a>
+        {% endfor %}
+      </div>
+
+    </div> 
+
+    <div class="wrapper">
+      <a name="linkboxes"></a>
+      <div class="linkbox">
+        Pages.
+        <br>
+        <a href = "/">Home.</a><br>
+      </div>
 		
-		<div class="linkbox">
-		Links.<br>
-		<a href="{{ log.Playlist_id }}">Playlist.</a><br>
-		<a href="https://github.com/MikeJJenks/spotter">App Source.</a><br>
-		<a href="https://github.com/MikeJJenks/mikejjenkinson.com">Page Source.</a><br>
-
-		</div>
-
-		<div class="linkbox">
-		References. <br>
-		<a href="https://spotipy.readthedocs.io/en/2.12.0/">Spotipy.</a><br>
-		<a href="https://developer.spotify.com/documentation/web-api/">Spotify Web API.</a><br>
-		<a href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04">Flask/Nginx/Gunicorn.</a>
-		<br>
-		</div>
-
-		</div>
-
+      <div class="linkbox">
+	Links.
 	<br>
-		{% for track in playscsv %}
-		{% set tp = track.Time_Played.split('T') %}
-		<div class="play">
+	<a href="{{ log.Playlist_id }}">Playlist.</a><br>
+	<a href="https://github.com/MikeJJenks/spotter">App Source.</a><br>
+	<a href="https://github.com/MikeJJenks/mikejjenkinson.com">Page Source.</a><br>
+      </div>
 
-		<div class="playnum">
-			<a href="listening/{{track.id}}">
-				{{ loop.index }}
-			</a>
-		</div>
-
-		<div class="playtext">
-			<a href="listening/{{track.id}}">
-				<div class="playtrack">{{ track.Track_Name }}</div>
-				<div class="playartist">{{ track.Artist }}</div>
-			{{ track.Album }}<br>
-			{{ tp[1].split('.')[0] }}, {{ tp[0] }} (UTC)<br>
-			
-			</a>
-		</div>
-
-		<div class="playimg">
-			<img src = "{{ track.uri }}", style="width:100px">			
-		</div>
-
-		</div>
-		{% endfor %}
+      <div class="linkbox">
+        References.
 	<br>
+	<a href="https://spotipy.readthedocs.io/en/2.12.0/">Spotipy.</a><br>
+	<a href="https://developer.spotify.com/documentation/web-api/">Spotify Web API.</a><br>
+	<a href="https://www.digitalocean.com/community/tutorials/how-to-serve-flask-applications-with-gunicorn-and-nginx-on-ubuntu-18-04">
+		Flask/Nginx/Gunicorn.</a>
+      </div>
 
-	</body>
+    </div>
+
+    <br>
+    <br>
+
+  </body>
 
 </html>

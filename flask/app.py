@@ -7,29 +7,39 @@ import pandas as pd
 import os
 import random
 
+import mstat
+
 app = Flask(__name__)  # Note the double underscores on each side!
 
+# This is the path to the spotter app files.  
 path = '/Users/michaeljenkinson/Code/Projects/gitReps/spotter'
 
-def getcsv(fn,fl):
+######### Begin function definitions ##########
+
+# Open a csv file as a dataframe, unless op = 0 which opens it as a list. 
+def getcsv(fn,fl,op = 0):
     fn = os.path.join(path,fl,fn) 
     if os.path.exists(fn):
-        f = open(fn, 'r')
-        fdict = csv.DictReader(f)
-        flist = list(fdict)
+        if( op == 0 ):
+            f = open(fn, 'r')
+            fdict = csv.DictReader(f)
+            flist = list(fdict)
+        else:
+            flist = pd.read_csv(fn)
     else:
         flist = []
     return(flist)
 
+# Open a json file as a dataframe.
 def getjson(fn,fl):
     fn = os.path.join(path,fl,fn)
     if os.path.exists(fn):
         f = pd.read_json(fn)
     else:
         f = []
-    print(f)
     return(f)
 
+# Choose a random background from the appropriate folder.
 def getbg():
     path2 = os.path.join(path,'flask','static','images')
     fns = os.listdir(path2)
@@ -38,12 +48,30 @@ def getbg():
     bg = os.path.join('images',random.choice(fns)) 
     return(bg)
 
-# Static test
+# Function 'splittime' splits a full UTC time object into date and time, with minutes as the smallest unit.
+def splittime(x):
+    xnew = str(x).split()
+    if( len(xnew) == 1 ):
+        xnew = str(x).split('T')
+    xnew[1] = ':'.join(xnew[1].split(':')[0:2])
+    return(xnew) 
+
+def splitarts(x):
+    xnew = str(x).split(';')
+    xnew = xnew[0]
+    return(xnew)
+
+########## End function definitions ##########
+
+
+
+# Render home page. 
 @app.route("/")
 def index():
     link = 'index.html'
     bg = getbg()
     return render_template(link, bg = bg)
+
 
 @app.route("/about")
 def about():
@@ -51,18 +79,86 @@ def about():
     bg = getbg()
     return render_template(link, bg = bg)
 
-# Static link test
+
+# Control panel for spotter app.
+@app.route("/controlpanel")
+def controlpanel():
+    link  = 'controlpanel.html'
+    bg = getbg()
+
+    logs = getcsv('log.csv','logs')
+    playsjson = getjson('plays.json','data')
+    playscsv = getcsv('plays.csv','data')
+
+    return render_template(link, bg = bg, logs = logs)
+
+
+# Summary readout page for listening history from Spotter app.
 @app.route("/listening")
 def listening():
     link  = 'listening.html'
+
+    # To help with grammar in template.
+    npl   = 's'
+    
+    # Number of aggregate tracks to show.
+    disp  = 10
+  
+    # Grab simple and detailed full play files.
+    playsjson = getjson('plays.json','data')
+    playscsv = getcsv('plays.csv','data', op = 1)
+
+    # Get random page background.
+    bg = getbg()
+
+    # Get latest update time and playlist id (should not change until playlist is full) from log file. 
+    log   = getcsv('log.csv','logs')[0]
+    log['Time_Updated'] = splittime(log['Time_Updated'])
+    logpl = log['Playlist_id'].split(':')[2]
+    log['Playlist_id'] = "https://open.spotify.com/playlist/" + logpl
+
+    # Fix page grammar if only one play was added.
+    if( int(log['Plays_Added']) == 1 ):
+        npl = ''
+
+    # Only use the first artist id available if there are multiple artists.
+    playscsv['artistid'] = playscsv['artistid'].apply(splitarts)
+
+    # Get monthly and annual top artists and top tracks played.
+    topartsm, toptracksm = mstat.getags(playscsv,  30)
+    topartsy, toptracksy = mstat.getags(playscsv,  365) 
+
+    # Get album art from detailed play history; change this to merge for speed.
+    for i, row in playscsv.iterrows(): 
+        if( (i <= len(playsjson) - 1) ):
+            playscsv.loc[i]['uri'] = playsjson.loc[i,'track.album.images'][0]['url']
+
+    # Format time played for tracks into date and time (smallest unit of minutes) - this is done after 'getags' since turning
+    # 'Time_Played' into a series of lists makes aggregating by date impossible.
+    playscsv['Time_Played'] = playscsv['Time_Played'].apply(splittime)
+
+    # First ten and second ten recent tracks are displayed in separate style boxes and are passed separately for 
+    # ease of use with iterator in Flask/Jinja. Check itertools later.
+    playsr1 = playscsv.iloc[ 0:10,:]
+    playsr2 = playscsv.iloc[10:20,:] 
+
+    # Full play variable 'playscsv' not used in template (deprecated).
+    return render_template(link, playscsv = playscsv, log = log, npl = npl, bg = bg, 
+            topartsm = topartsm.head(disp), toptracksm = toptracksm.head(disp), 
+            topartsy = topartsy.head(disp), toptracksy = toptracksy.head(disp),
+            playsr1  = playsr1,                playsr2 = playsr2)
+
+
+# Listening statistics readout page.  
+@app.route("/listening/fulltracks")
+def fulltracks():
+    link  = 'fulltracks.html'
     npl   = 's' 
     
     playsjson = getjson('plays.json','data')
     playscsv = getcsv('plays.csv','data') 
 
     bg = getbg()
-        
-    # print(playsjson.columns)
 
     log   = getcsv('log.csv','logs')[0]
     logdt = log['Time_Updated'].split()
@@ -74,9 +170,6 @@ def listening():
     if( int(log['Plays_Added']) == 1 ):
         npl = ''
     
-    # print(playsjson.loc[0,'track.album.images'][0]['url'])
-    # print(len(playscsv))
-    # print(len(playsjson))
     print(playscsv)
 
     for i in range(len(playscsv) ):
@@ -94,27 +187,16 @@ def track(trackid):
 
     bg = getbg()
 
-
-    print(plays)
-
     for row in playscsv:
         if row['id'] == trackid:
             trackcsv = row
-            #print(trackcsv)
     for index, track in plays.iterrows(): 
-        #print("here222")
-        #print(index)
-        #print(track)
         if int(index) == int(trackid):
             return render_template(link, track=track, trackcsv=trackcsv, bg = bg)
 
-    # plays = getcsv('plays.csv','data')
-    # for track in plays:
-    #     if track['id'] == trackid:
-    #         return render_template(link, track=track)
     abort(404)
 
-# Static link test
+# Static link.
 @app.route("/watching")
 def watching():
     link  = 'watching.html'
