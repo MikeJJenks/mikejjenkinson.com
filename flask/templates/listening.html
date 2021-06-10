@@ -132,7 +132,7 @@
                 <div class="name">{{ track.Track_Name }}</div>
                 <div class="album">{{ track.Album }}</div>
                 <div class="artist">{{ track.Artist }}</div>
-	        <div class="time">Played on {{ track['Time_Played'][0] }} at {{ track['Time_Played'][1] }}</div>
+	        <div class="time">Played on {{ track['Time_Played'][0] }} at {{ track['Time_Played'][1] }} (UTC)</div>
               </div>
             </div>
         {% endfor %}
@@ -149,7 +149,7 @@
                 <div class="name">{{ track.Track_Name }}</div>
                 <div class="album">{{ track.Album }}</div>
 	        <div class="artist">{{ track.Artist }}</div> 
-	        <div class="time">Played on {{ track['Time_Played'][0] }} at {{ track['Time_Played'][1] }}</div>
+	        <div class="time">Played on {{ track['Time_Played'][0] }} at {{ track['Time_Played'][1] }} (UTC)</div>
               </div>
             </div>
 	  </a>

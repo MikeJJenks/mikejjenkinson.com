@@ -7,101 +7,30 @@ import pandas as pd
 import os
 import random
 
+# 'mstat.py' contains function definitions written for use in this flask application.
 import mstat
 
-app = Flask(__name__)  # Note the double underscores on each side!
+# Initialize Flask app
+app = Flask(__name__)
 
-# This is the path to the spotter app files.  
+# This is the path to the spotter output data files.  
 path = '/Users/michaeljenkinson/Code/Projects/gitReps/spotter'
-
-######### Begin function definitions ##########
-
-# Open a csv file as a dataframe, unless op = 0 which opens it as a list. 
-def getcsv(fn,fl,op = 0):
-    fn = os.path.join(path,fl,fn) 
-    if os.path.exists(fn):
-        if( op == 0 ):
-            f = open(fn, 'r')
-            fdict = csv.DictReader(f)
-            flist = list(fdict)
-        else:
-            flist = pd.read_csv(fn)
-    else:
-        flist = []
-    return(flist)
-
-# Open a json file as a dataframe.
-def getjson(fn,fl):
-    fn = os.path.join(path,fl,fn)
-    if os.path.exists(fn):
-        f = pd.read_json(fn)
-    else:
-        f = []
-    return(f)
-
-# Choose a random background from the appropriate folder.
-def getbg():
-    path2 = os.path.join(path,'flask','static','images')
-    fns = os.listdir(path2)
-    if 'DS_Store' in fns:
-        fns.remove('DS_Store')
-    bg = os.path.join('images',random.choice(fns)) 
-    return(bg)
-
-# Function 'splittime' splits a full UTC time object into date and time, with minutes as the smallest unit.
-def splittime(x):
-    xnew = str(x).split()
-    if( len(xnew) == 1 ):
-        xnew = str(x).split('T')
-    xnew[1] = ':'.join(xnew[1].split(':')[0:2])
-    return(xnew) 
-
-def splitarts(x):
-    xnew = str(x).split(';')
-    xnew = xnew[0]
-    return(xnew)
-
-########## End function definitions ##########
-
-
 
 # Render home page. 
 @app.route("/")
 def index():
     link = 'index.html'
+
+    # Get random page background from stored images.
     bg = getbg()
     return render_template(link, bg = bg)
-
-
-@app.route("/about")
-def about():
-    link  = 'about.html'
-    bg = getbg()
-    return render_template(link, bg = bg)
-
-
-# Control panel for spotter app.
-@app.route("/controlpanel")
-def controlpanel():
-    link  = 'controlpanel.html'
-    bg = getbg()
-
-    logs = getcsv('log.csv','logs')
-    playsjson = getjson('plays.json','data')
-    playscsv = getcsv('plays.csv','data')
-
-    return render_template(link, bg = bg, logs = logs)
-
 
 # Summary readout page for listening history from Spotter app.
 @app.route("/listening")
 def listening():
     link  = 'listening.html'
-
-    # To help with grammar in template.
-    npl   = 's'
     
-    # Number of aggregate tracks to show.
+    # Number of aggregated top tracks and artists to show.
     disp  = 10
   
     # Grab simple and detailed full play files.
@@ -143,11 +72,34 @@ def listening():
     playsr2 = playscsv.iloc[10:20,:] 
 
     # Full play variable 'playscsv' not used in template (deprecated).
-    return render_template(link, playscsv = playscsv, log = log, npl = npl, bg = bg, 
+    return render_template(link, playscsv = playscsv, log = log, bg = bg, 
             topartsm = topartsm.head(disp), toptracksm = toptracksm.head(disp), 
             topartsy = topartsy.head(disp), toptracksy = toptracksy.head(disp),
-            playsr1  = playsr1,                playsr2 = playsr2)
+            playsr1  = playsr1, playsr2 = playsr2)
 
+
+
+###### The following page definitions are deprecated or for future construction. ######
+
+# Page for information about website.
+@app.route("/about")
+def about():
+    link  = 'about.html'
+    bg = getbg()
+    return render_template(link, bg = bg)
+
+# Control panel for spotter app.
+@app.route("/controlpanel")
+def controlpanel():
+    link  = 'controlpanel.html'
+    bg = getbg()
+
+    # Get update log file and track play files.
+    logs = getcsv('log.csv','logs')
+    playsjson = getjson('plays.json','data')
+    playscsv = getcsv('plays.csv','data')
+
+    return render_template(link, bg = bg, logs = logs)
 
 # Listening statistics readout page.  
 @app.route("/listening/fulltracks")
@@ -170,10 +122,8 @@ def fulltracks():
     if( int(log['Plays_Added']) == 1 ):
         npl = ''
     
-    print(playscsv)
 
     for i in range(len(playscsv) ):
-        print(i)
         if( (i <= len(playsjson) - 1) ):
             playscsv[i]['uri'] = playsjson.loc[i,'track.album.images'][0]['url'] 
 
@@ -197,15 +147,14 @@ def track(trackid):
     abort(404)
 
 # Static link.
-@app.route("/watching")
+@app.route("/static")
 def watching():
-    link  = 'watching.html'
+    link  = 'static.html'
     bg = getbg()
-    films = getcsv('films2.csv','data')
-    print(films)
     return render_template(link, bg = bg, films = films)
- 
-if __name__ == '__main__':
-    # Fire up the Flask test server
 
+
+########################################
+# Test server for debugging.
+if __name__ == '__main__':
     app.run(debug=True, use_reloader=True)
