@@ -8,7 +8,7 @@ import os
 import random
 
 # 'mstat.py' contains function definitions written for use in this flask application.
-import mstat
+from mstat import * 
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -54,8 +54,8 @@ def listening():
     playscsv['artistid'] = playscsv['artistid'].apply(splitarts)
 
     # Get monthly and annual top artists and top tracks played.
-    topartsm, toptracksm = mstat.getags(playscsv,  30)
-    topartsy, toptracksy = mstat.getags(playscsv,  365) 
+    topartsm, toptracksm = getags(playscsv,  30)
+    topartsy, toptracksy = getags(playscsv,  365) 
 
     # Get album art from detailed play history; change this to merge for speed.
     for i, row in playscsv.iterrows(): 

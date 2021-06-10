@@ -1,7 +1,13 @@
+import csv
 import pandas as pd
 import datetime
+import os
+import random
 
 # This file contains function definitions used in the main flask application file 'app.py'.
+
+# This is the path to the spotter output data files.
+path = '/Users/michaeljenkinson/Code/Projects/gitReps/spotter'
 
 # Open a csv file as a dataframe, unless op = 0 which opens it as a list. 
 def getcsv(fn,fl,op = 0):
